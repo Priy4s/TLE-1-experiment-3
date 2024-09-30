@@ -83,8 +83,10 @@ body {
 /*}*/
 
 .profile-btn {
-    color: #0B2447; /* Text color */
-    background-color: #A5D7E8; /* Set background color */
+    color: #0B2447;
+    /* Text color */
+    background-color: #A5D7E8;
+    /* Set background color */
     position: absolute;
     bottom: 20px;
     width: 13vw;
@@ -96,8 +98,10 @@ body {
 }
 
 .profile-btn:hover {
-    background-color: #576CBC; /* Change background color on hover */
-    color: #fff; /* Text color on hover */
+    background-color: #576CBC;
+    /* Change background color on hover */
+    color: #fff;
+    /* Text color on hover */
 }
 
 
@@ -113,22 +117,26 @@ body {
     border-radius: 10px;
     margin-bottom: 20px;
 }
-.side-by-side{
+
+.side-by-side {
     display: flex;
     justify-content: space-between;
 }
-.side-by-side img{
+
+.side-by-side img {
     width: 30%;
     margin-top: 0;
 
 }
+
 .live-label {
     color: red;
     font-weight: bold;
 }
 
 .category-btn {
-    background-color: rgba(87, 108, 188, 0.2); /* Adjusted color with 20% opacity */
+    background-color: rgba(87, 108, 188, 0.2);
+    /* Adjusted color with 20% opacity */
     border-radius: 20px;
     padding: 8px 15px;
     font-size: 14px;
@@ -561,17 +569,24 @@ h3 {
     padding: 15px;
     display: block;
     text-align: left;
-    white-space: nowrap; /* Prevent text from wrapping */
-    overflow: hidden; /* Hide overflowed text */
-    text-overflow: ellipsis; /* Add ellipsis for overflowed text */
-    max-width: 100%; /* Ensure link does not exceed sidebar width */
+    white-space: nowrap;
+    /* Prevent text from wrapping */
+    overflow: hidden;
+    /* Hide overflowed text */
+    text-overflow: ellipsis;
+    /* Add ellipsis for overflowed text */
+    max-width: 100%;
+    /* Ensure link does not exceed sidebar width */
 }
+
 .sidebar {
     background-color: #0B2447;
     height: 100vh;
     /*width: 450px; !* Ensure this matches your HTML or adjust as needed *!*/
-    overflow-y: auto; /* Add scrolling if content overflows */
+    overflow-y: auto;
+    /* Add scrolling if content overflows */
 }
+
 .sidebar a::after {
     content: "";
     position: absolute;
@@ -581,4 +596,19 @@ h3 {
     height: 100%;
     background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
     pointer-events: none;
+}
+
+#star-rating .star {
+    font-size: 30px;
+    cursor: pointer;
+    color: gold;
+}
+
+#rating-section {
+    margin-top: 20px;
+}
+
+#rating-message {
+    margin-top: 10px;
+    color: green;
 }
