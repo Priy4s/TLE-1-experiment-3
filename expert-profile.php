@@ -75,6 +75,24 @@ $avgRatingQuery = "
 $avgRatingResult = mysqli_query($db, $avgRatingQuery);
 $averageRating = mysqli_fetch_assoc($avgRatingResult)['average_rating'];
 
+// Handle adding and removing flairs
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['add_flairs']) && !empty($_POST['flairs'])) {
+        foreach ($_POST['flairs'] as $flairId) {
+            $insertQuery = "INSERT INTO usertags (user_id, tag_id) VALUES ('$user_id', '$flairId')";
+            mysqli_query($db, $insertQuery);
+        }
+        header("Location: expert-profile.php"); // Refresh the page to see the changes
+        exit();
+    }
+
+    if (isset($_POST['remove_flair']) && !empty($assigned_flairs)) {
+        $removeQuery = "DELETE FROM usertags WHERE user_id = '$user_id' AND tag_id = (SELECT id FROM tags WHERE tag_name = '{$assigned_flairs[count($assigned_flairs) - 1]}')";
+        mysqli_query($db, $removeQuery);
+        header("Location: expert-profile.php"); // Refresh the page to see the changes
+        exit();
+    }
+}
 ?>
 
 <!doctype html>
@@ -164,54 +182,54 @@ $averageRating = mysqli_fetch_assoc($avgRatingResult)['average_rating'];
 <body>
 
 <main class="profileMain">
-<section>
-    <div class="sidebar">
-        <h2>Your Assigned Flairs</h2>
-        <?php if (!empty($assigned_flairs)) {
-            foreach ($assigned_flairs as $flair) {
-                echo "<span class='topic'>$flair</span>";
-            }
-            ?>
-            <form method="post" class="removeFlairForm">
-                <button type="submit" name="remove_flair">Remove Newest Flair</button>
-            </form>
-            <?php
-        } else {
-            echo "<span class='topic'>No flairs assigned</span>";
-        } ?>
-    </div>
-    <div class="sidebarProfile">
-        <div class="profile">
-            <div>
-                <span id="star-rating-display"><?php echo $averageRating !== null ? number_format($averageRating, 2) : 'No ratings available.'; ?></span>
-            </div>
-            <div class="username">
-                <?php echo htmlspecialchars($username) . "'s profile"; ?>
+    <section>
+        <div class="sidebar">
+            <h2>Your Assigned Flairs</h2>
+            <?php if (!empty($assigned_flairs)) {
+                foreach ($assigned_flairs as $flair) {
+                    echo "<span class='topic'>$flair</span>";
+                }
+                ?>
+                <form method="post" class="removeFlairForm">
+                    <button type="submit" name="remove_flair">Remove Newest Flair</button>
+                </form>
+                <?php
+            } else {
+                echo "<span class='topic'>No flairs assigned</span>";
+            } ?>
+        </div>
+        <div class="sidebarProfile">
+            <div class="profile">
+                <div>
+                    <span id="star-rating-display"><?php echo $averageRating !== null ? number_format($averageRating, 2) : 'No ratings available.'; ?></span>
+                </div>
+                <div class="username">
+                    <?php echo htmlspecialchars($username) . "'s profile"; ?>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="mainPageContent">
-    <div class="flair-header">
-        <h3>Select Flairs to Add</h3>
-    </div>
-    <form method="post" class="flairForm">
-        <div class="flair-checkboxes">
-            <?php if (!empty($all_flairs)): ?>
-                <?php foreach ($all_flairs as $flair): ?>
-                    <label>
-                        <input type="checkbox" name="flairs[]" value="<?php echo htmlspecialchars($flair['id']); ?>">
-                        <?php echo htmlspecialchars($flair['tag_name']); ?>
-                    </label>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>No flairs available.</p>
-            <?php endif; ?>
+    <section class="mainPageContent">
+        <div class="flair-header">
+            <h3>Select Flairs to Add</h3>
         </div>
-        <button type="submit" name="add_flairs">Add Selected Flairs</button>
-    </form>
-</section>
+        <form method="post" class="flairForm">
+            <div class="flair-checkboxes">
+                <?php if (!empty($all_flairs)): ?>
+                    <?php foreach ($all_flairs as $flair): ?>
+                        <label>
+                            <input type="checkbox" name="flairs[]" value="<?php echo htmlspecialchars($flair['id']); ?>">
+                            <?php echo htmlspecialchars($flair['tag_name']); ?>
+                        </label>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>No flairs available.</p>
+                <?php endif; ?>
+            </div>
+            <button type="submit" name="add_flairs">Add Selected Flairs</button>
+        </form>
+    </section>
 </main>
 
 <script>
@@ -223,11 +241,10 @@ $averageRating = mysqli_fetch_assoc($avgRatingResult)['average_rating'];
 
         for (let i = 1; i <= 5; i++) {
             const star = document.createElement('span');
-            star.innerHTML = i <= rating ? '&#9733;' : '&#9734;';
+            star.className = 'star';
+            star.innerHTML = i <= rating ? '&#9733;' : '&#9734;'; // Filled star or empty star
             starRatingDisplay.appendChild(star);
         }
-
-        document.getElementById('rating-text').innerText = `Average rating: ${rating}/5`;
     }
 
     displayStars(averageRating);
