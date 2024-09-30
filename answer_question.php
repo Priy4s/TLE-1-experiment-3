@@ -1,6 +1,6 @@
 <?php
+require_once __DIR__ . '/includes/authentication.php';
 require_once 'includes/dbconnect.php';
-session_start(); // Start session to access user_id
 
 // Fetch question details
 $question_id = $_GET['question_id'];

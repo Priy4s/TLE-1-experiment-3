@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/includes/authentication.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -15,7 +15,7 @@ function fetchQuestions($db) {
             FROM questions 
             JOIN tags ON questions.tag_id = tags.id 
             WHERE questions.tag_id = ?";  // For filtering based on a specific category (if needed)
-    
+
     $tag_id = $_GET['category_id'] ?? null; // Get category_id from URL or set to null
 
     if ($tag_id) {

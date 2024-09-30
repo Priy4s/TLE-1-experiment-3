@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/includes/authentication.php';
 require_once __DIR__ . '/includes/dbconnect.php';
 
 // Check if question_id is provided in the URL

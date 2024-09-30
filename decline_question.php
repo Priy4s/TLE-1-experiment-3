@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/includes/authentication.php';
 require_once 'includes/dbconnect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
