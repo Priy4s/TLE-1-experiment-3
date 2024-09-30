@@ -1,0 +1,584 @@
+body {
+    font-family: sans-serif;
+}
+
+.registrationForm {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 30vw;
+    padding: 5%;
+    background-color: #A5D7E8;
+    border-radius: 15px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.5), 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.registrationForm span {
+    margin-top: 10px;
+    font-size: 1.1rem;
+}
+
+.registrationForm a {
+    color: #0B2447;
+    font-weight: bold;
+}
+
+.registrationForm label {
+    font-size: 1.3rem;
+}
+
+.registrationForm h1 {
+    font-size: 2.2rem;
+    margin-top: 0.2em;
+}
+
+.form-field {
+    padding: 5px;
+    margin-bottom: 18px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1.2rem;
+}
+
+.registrationSection {
+    display: flex;
+    justify-content: center;
+    margin-top: 8vh;
+}
+
+.submitButton {
+    padding: 10px;
+    border: solid 3px #19376D;
+    border-radius: 4px;
+    background-color: #19376D;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-top: 10px;
+    color: white;
+}
+
+.submitButton:hover {
+    background-color: white;
+    color: black;
+}
+
+
+/*!* Sidebar styles *!*/
+/*.sidebar {*/
+/*    background-color: #0B2447;*/
+/*    height: 100vh;*/
+/*    min-width: 25vw;*/
+/*}*/
+
+/*.sidebar a {*/
+/*    color: #fff;*/
+/*    text-decoration: none;*/
+/*    padding: 15px;*/
+/*    display: block;*/
+/*    text-align: left;*/
+/*}*/
+
+/*.sidebar a:hover {*/
+/*    background-color: rgba(11, 36, 71, 0.7);*/
+/*}*/
+
+.profile-btn {
+    color: #0B2447; /* Text color */
+    background-color: #A5D7E8; /* Set background color */
+    position: absolute;
+    bottom: 20px;
+    width: 13vw;
+    text-align: center;
+    padding: 10px;
+    border-radius: 20px;
+    text-decoration: none;
+    border: none;
+}
+
+.profile-btn:hover {
+    background-color: #576CBC; /* Change background color on hover */
+    color: #fff; /* Text color on hover */
+}
+
+
+/* Main content styles */
+.content-container {
+    padding: 40px 140px;
+    background-color: #f8f9fa;
+}
+
+.content-box {
+    background-color: #e0f7fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.side-by-side{
+    display: flex;
+    justify-content: space-between;
+}
+.side-by-side img{
+    width: 30%;
+    margin-top: 0;
+
+}
+.live-label {
+    color: red;
+    font-weight: bold;
+}
+
+.category-btn {
+    background-color: rgba(87, 108, 188, 0.2); /* Adjusted color with 20% opacity */
+    border-radius: 20px;
+    padding: 8px 15px;
+    font-size: 14px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+
+.category-btn.active {
+    background-color: #0B2447;
+    color: #fff;
+}
+
+/* Custom input and button styles */
+.search-bar {
+    width: 90%;
+    border-radius: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
+.send-btn {
+    background-color: #0B2447;
+    color: white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+    }
+
+    .content-container {
+        margin-top: 100px;
+    }
+}
+
+/* Login Page */
+
+.login-container {
+    background-color: rgba(165, 215, 232, 0.5);
+    border-radius: 10px;
+    padding: 2rem;
+    max-width: 400px;
+    margin: 100px auto;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+    border-top: 5px solid var(--primary-color);
+}
+
+/* Custom Color Palette */
+:root {
+    --primary-color: #0B2447;
+    --secondary-color: #19376D;
+    --accent-color: #576CBC;
+    --light-color: #A5D7E8;
+}
+
+body {
+    background-color: #ffff;
+}
+
+
+
+.login-title {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+}
+
+.form-control {
+    border-radius: 20px;
+    border: 1px solid var(--accent-color);
+    padding: 10px;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    margin: 1rem;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+}
+
+.notification {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: red;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 1rem;
+    }
+
+    .login-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* registeration page */
+
+.registrationForm {
+    background-color: rgba(165, 215, 232, 0.5);
+    border-radius: 10px;
+    padding: 2rem;
+    max-width: 500px;
+    margin: 100px auto;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+    border-top: 5px solid var(--primary-color);
+}
+
+.registrationForm h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+}
+
+.form-field {
+    border-radius: 20px;
+    border: 1px solid var(--accent-color);
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.submitButton {
+    background-color: var(--primary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    width: 100%;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    color: white;
+}
+
+.submitButton:hover {
+    background-color: var(--secondary-color);
+}
+
+.error {
+    color: red;
+}
+
+.strength {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.strength.weak {
+    color: red;
+}
+
+.strength.medium {
+    color: orange;
+}
+
+.strength.strong {
+    color: green;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .registrationForm {
+        padding: 1rem;
+    }
+
+    .registrationForm h1 {
+        font-size: 1.5rem;
+    }
+
+}
+
+
+/* Global styles */
+
+body.login-page {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Login container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 30vw;
+    padding: 5%;
+    background-color: #A5D7E8;
+    border-radius: 15px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.5), 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Form styling */
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-title {
+    font-size: 2.2rem;
+    color: #19376D;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    font-size: 1.3rem;
+    color: #19376D;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-group input {
+    padding: 5px;
+    margin-bottom: 18px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1.2rem;
+}
+
+/* Login button */
+.login-button {
+    padding: 10px;
+    border: solid 3px #19376D;
+    border-radius: 4px;
+    background-color: #19376D;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-top: 10px;
+    color: white;
+}
+
+.login-button:hover {
+    background-color: white;
+    color: black;
+}
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 25vw;
+    height: 100vh;
+    background-color: #0B2447;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+    z-index: 1;
+}
+
+.sidebarProfile {
+    width: 25vw;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    bottom: 0;
+    height: 25vh;
+    padding: 20px;
+    left: 0;
+    padding-bottom: 0;
+    z-index: 1;
+}
+
+
+.profile {
+    width: 25vw;
+    color: white;
+    background-color: #0B2447;
+    clip-path: polygon(0 0, 85% 0, 100% 100%, 0% 100%);
+    font-size: 1.3rem;
+    align-content: flex-end;
+    padding-bottom: 10px;
+    position: sticky;
+}
+
+.topic {
+    background-color: #19376D;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    width: 80%;
+    text-align: left;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+.mainPageContent {
+    left: 30vw;
+    width: 68vw;
+    position: relative;
+}
+
+.flairForm {
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.flairForm input {
+    width: 80%;
+    background-color: #CDD3EB;
+    color: black;
+    padding: 15px;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 15px;
+}
+
+.flairForm button {
+    background-color: #0B2447;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 15px;
+    width: 12%;
+}
+
+.username {
+    background-color: #19376D;
+    border-radius: 15px;
+    width: 80%;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: white;
+}
+
+.removeFlairForm {
+    width: 80%;
+}
+
+.removeFlairForm button {
+    background-color: #19376D;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    width: 100%;
+    text-align: left;
+    *cursor: pointer;
+    font-size: 1.1rem;
+    border-radius: 10px;
+}
+
+.removeFlairForm button:hover {
+    color: #0B2447;
+    background-color: white;
+}
+
+.profile span {
+    padding: 10px 15px;
+}
+
+.profile div {
+    margin-bottom: 10px;
+}
+
+/* CSS voor de sterrenweergave */
+.filled-star {
+    color: gold;
+    font-size: 24px;
+}
+
+.empty-star {
+    color: lightgray;
+    font-size: 24px;
+}
+
+.rating-display {
+    margin-top: 20px;
+}
+
+h3 {
+    font-size: 18px;
+}
+
+.flairs {
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.d-flex {
+    max-width: 80%;
+    right: 0;
+    position: absolute;
+}
+
+.searchDiv {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.sidebar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 15px;
+    display: block;
+    text-align: left;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflowed text */
+    text-overflow: ellipsis; /* Add ellipsis for overflowed text */
+    max-width: 100%; /* Ensure link does not exceed sidebar width */
+}
+.sidebar {
+    background-color: #0B2447;
+    height: 100vh;
+    /*width: 450px; !* Ensure this matches your HTML or adjust as needed *!*/
+    overflow-y: auto; /* Add scrolling if content overflows */
+}
+.sidebar a::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    /*width: 20px; !* Width of the fade effect *!*/
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+    pointer-events: none;
+}
