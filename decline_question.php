@@ -1,20 +1,33 @@
 <?php
+require_once __DIR__ . '/includes/authentication.php';
 require_once 'includes/dbconnect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $question_id = $_POST['question_id'];
 
-    // Mark question as declined or remove from the database
-    $stmt = $db->prepare("DELETE FROM questions WHERE id = ?");
-    $stmt->bind_param('i', $question_id);
+    $user_id = $_SESSION['user_id'];
 
-    if ($stmt->execute()) {
-        header("Location: questions.php");
-        exit;
-    } else {
-        echo "Error: Could not decline the question.";
+    $userRoleQuery = "SELECT role FROM users WHERE id = $user_id";
+    $userRoleResult = mysqli_query($db, $userRoleQuery);
+    $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
+
+    if (isset($_POST['cancel'])) {
+        header("Location: question_details.php?question_id=$question_id");
+        exit();
+    }
+
+// If "Decline" button is clicked
+    if (isset($_POST['decline'])) {
+        if ($userRole == 'expert' || $userRole == 'admin') {
+            header("Location: index.php");
+        } else {
+            header("Location: user-index.php");
+        }
+        exit();
     }
 }
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -33,11 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="container my-5">
     <div class="card p-4" style="background-color: var(--light-color);">
         <h1 class="text-center" style="color: var(--primary-color);">Are you sure you want to decline this question?</h1>
-        <p><?php echo htmlspecialchars($question['content']); ?></p>
 
         <form method="post">
-            <button type="submit" class="btn btn-danger">Yes, Decline</button>
-            <a href="questions.php" class="btn btn-secondary" style="background-color: var(--accent-color);">Cancel</a>
+            <input type="hidden" name="question_id" value="<?php echo htmlspecialchars($_GET['question_id']); ?>">
+
+            <button type="submit" name="decline" class="btn btn-danger">Yes, decline</button>
+            <button type="submit" name="cancel" class="btn btn-secondary">Cancel</button>
         </form>
     </div>
 </div>

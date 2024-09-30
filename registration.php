@@ -1,4 +1,5 @@
 <?php
+
 $errors = [];
 $success = '';
 
@@ -100,27 +101,30 @@ if (isset($_POST['submit'])) {
 <header>
 </header>
 <main>
-    <h1>Register Account</h1>
     <section>
-        <form class="formcontainer" id="RegistrationForm" action="" method="post">
+        <form class="formcontainer login-container"  id="RegistrationForm" action="" method="post">
+
+            <h1 class="login-title">Register Account</h1>
 
             <!-- Username Field -->
-            <label for="username">Username</label>
-            <input class="inputfield" type="text" id="username" name="username" value="<?php echo htmlspecialchars($_POST['username'] ?? '', ENT_QUOTES); ?>" oninput="checkCredentials('username', this.value)">
+            <label for="username" class="form-label">Username</label>
+            <input class="form-control" type="text" id="username" name="username" value="<?php echo htmlspecialchars($_POST['username'] ?? '', ENT_QUOTES); ?>" oninput="checkCredentials('username', this.value)">
             <p id="usernameMessage" class="error"><?php echo $errors['username'] ?? ''; ?></p>
 
             <!-- Email Field -->
             <label for="email">E-mail</label>
-            <input class="inputfield" type="email" id="email" name="email" value="<?php echo htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES); ?>" oninput="checkCredentials('email', this.value)">
+            <input class="form-control" type="email" id="email" name="email" value="<?php echo htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES); ?>" oninput="checkCredentials('email', this.value)">
             <p id="emailMessage" class="error"><?php echo $errors['email'] ?? ''; ?></p>
 
             <!-- Password Field -->
             <label for="password">Password</label>
-            <input class="inputfield" type="password" id="password" name="password" oninput="checkPasswordStrength(this.value)">
+            <input class="form-control" type="password" id="password" name="password" oninput="checkPasswordStrength(this.value)">
             <p id="passwordMessage" class="strength"><?php echo $errors['password'] ?? ''; ?></p>
 
-            Ben jij een expert?
-            <input type="checkbox" name="mycheckbox" id="mycheckbox" value="1" /><br>
+            <div>
+                Ben jij een expert?
+                <input type="checkbox" name="mycheckbox" id="mycheckbox" value="1" /><br>
+            </div>
             <div id="mycheckboxdiv" style="display:none">
                 <?php if (!empty($tags)): ?>
                 <?php 
@@ -128,12 +132,6 @@ if (isset($_POST['submit'])) {
                 foreach ($tags as $tag): ?>
                     <input type="checkbox" name="tags[]" value="<?php echo htmlspecialchars($tag['id']); ?>">
                     <?php echo htmlspecialchars($tag['tag_name']); ?>
-                <?php
-                $counter++; // Increment the counter
-                if ($counter % 5 == 0) {
-                    echo "<br>"; // Insert a line break after every 5 checkboxes
-                }
-                ?>
                 <?php endforeach; ?>
             <?php else: ?>
                 <p>Geen tags beschikbaar.</p>
@@ -146,7 +144,7 @@ if (isset($_POST['submit'])) {
                 });
             </script>
 
-            <input class="submitButton" type="submit" name="submit" value="Submit">
+            <input class="login-button" type="submit" name="submit" value="Submit">
 
             <span>Heb je al een account? <a href="login.php">Log</a> nu in of ga naar de <a href="index.php">home</a> pagina</span>
         </form>

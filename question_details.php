@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/includes/authentication.php';
 require_once __DIR__ . '/includes/dbconnect.php';
 
 // Check if question_id is provided in the URL
@@ -11,7 +12,7 @@ if (isset($_GET['question_id'])) {
     $stmt->bind_param("i", $question_id);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     if ($result->num_rows > 0) {
         $question = $result->fetch_assoc();
     } else {
@@ -49,17 +50,24 @@ if (isset($_POST['decline'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="./styles/style.css" rel="stylesheet">
 </head>
-<body>
-    <div class="container mt-5">
-        <h2><?php echo htmlspecialchars($question['content']); ?></h2>
-        <p><strong>Question ID:</strong> <?php echo $question['id']; ?></p>
+<body class="bg-light">
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-body text-center">
+            <h2 class="text-primary fw-normal"><?php echo 'Video call request'?></h2><br><br>
+            <h3 class="fs-3"><?php echo htmlspecialchars($question['content'])?></h3>
+            <p class="lead"><strong>Question ID:</strong> <?php echo $question['id']; ?></p>
 
-        <form method="post">
-            <button type="submit" name="answer" class="btn btn-success">Answer</button>
-            <button type="submit" name="decline" class="btn btn-danger">Decline</button>
-        </form>
+            <form method="post">
+                <button type="submit" name="answer" class="btn btn-primary me-2">Answer</button>
+                <button type="submit" name="decline" class="btn btn-danger">Decline</button>
+            </form>
 
-        <a href="index.php" class="btn btn-primary mt-3">Back to Questions</a>
+            <div class="mt-3">
+                <a href="index.php" class="btn btn-outline-primary">Back to Questions</a>
+            </div>
+        </div>
     </div>
+</div>
 </body>
 </html>

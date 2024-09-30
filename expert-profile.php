@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start de sessie
+require_once __DIR__ . '/includes/authentication.php';
 
 require_once "includes/dbconnect.php";
 
