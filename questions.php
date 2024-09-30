@@ -42,7 +42,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question_content'], $
     $stmt->bind_param("iis", $user_id, $category_id, $question_content);
 
     if ($stmt->execute()) {
-        header("Location: index.php");
+        // Determine user role (assuming you store role in session)
+        $is_expert = $_SESSION['is_expert'] ?? false; // Check if user is an expert
+
+        // Redirect to appropriate page based on user role
+        if ($is_expert) {
+            header("Location: index.php"); // Redirect to expert's index
+        } else {
+            header("Location: user-index.php"); // Redirect to user's index
+        }
         exit();
     } else {
         echo "Error: " . $stmt->error;
