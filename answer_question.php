@@ -11,6 +11,11 @@ $question = $stmt->get_result()->fetch_assoc();
 
 // Get the logged-in user's ID (who is acting as an expert)
 $user_id = $_SESSION['user_id'];
+
+$userRoleQuery = "SELECT role FROM users WHERE id = $user_id";
+$userRoleResult = mysqli_query($db, $userRoleQuery);
+$userRole = mysqli_fetch_assoc($userRoleResult)['role'];
+
 ?>
 
 <!doctype html>
@@ -32,7 +37,13 @@ $user_id = $_SESSION['user_id'];
             <div id="container">
                 <video autoplay="true" id="videoElement"></video>
             </div>
-            <button id="endCall">End Call</button>
+            <?php
+                if ($userRole == 'expert' || $userRole == 'admin') {
+                    echo '<button id="endCallToHome">End Call</button>';
+                } else {
+                    echo '<button id="endCallToRating">End Call and rate expert</button>';
+                }
+            ?>
         </section>
     </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
@@ -51,7 +62,22 @@ $user_id = $_SESSION['user_id'];
             });
     }
 
-    document.getElementById("endCall").onclick = function () {
-        window.location.href = "rating.php";
-    };
+    document.addEventListener('DOMContentLoaded', function () {
+        const endCallToHome = document.getElementById("endCallToHome");
+        const endCallToRating = document.getElementById("endCallToRating");
+
+        if (endCallToHome) {
+            endCallToHome.addEventListener('click', function () {
+                window.location.href = "index.php";
+            });
+        }
+
+        if (endCallToRating) {
+            endCallToRating.addEventListener('click', function () {
+                window.location.href = "rating.php";  // 
+            });
+        }
+    });
+
+
 </script>
