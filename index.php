@@ -1,5 +1,7 @@
 <?php
+require_once __DIR__ . '/includes/authentication.php';
 require_once __DIR__ . '/includes/dbconnect.php';
+
 /** @var mysqli $db */
 $tags = fetchTags($db);  // Ensure that $conn is passed correctly
 
@@ -20,7 +22,6 @@ function fetchTags($db)
     return $tags; // Return an array of tag data
 }
 require_once __DIR__ . '/includes/dbconnect.php';
-session_start();
 // Ensure the user is logged in and has the 'expert' role
 //if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'expert') {
 //    http_response_code(403);
@@ -97,10 +98,8 @@ $questions = fetchQuestionsForExpert($db, $expertTags);
     <div class="sidebarProfile">
         <div class="profile">
             <div>
-                <a href="login.php" class="username">Login</a>
-                <a href="logout.php" class="username">Logout</a>
-                <a href="registration.php" class="username">Register</a>
                 <a href="expert-profile.php" class="username">Profile</a>
+                <a href="logout.php" class="username">Logout</a>
             </div>
         </div>
     </div>
@@ -108,7 +107,7 @@ $questions = fetchQuestionsForExpert($db, $expertTags);
     <div class="d-flex">
         <!-- Main Content -->
         <div class="content-container">
-            <form method="post" action="questions.php"> 
+            <form method="post" action="questions.php">
                 <!-- Search Section -->
                 <div class="searchDiv align-items-center justify-content-between">
                     <input type="text" name="question_content" class="search-bar" placeholder="Ask a question" required> <!-- Added name for question_content -->

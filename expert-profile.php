@@ -1,6 +1,6 @@
 <?php
-session_start(); // Start the session
 
+require_once __DIR__ . '/includes/authentication.php';
 require_once "includes/dbconnect.php";
 
 /** @var mysqli $db */

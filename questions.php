@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/includes/authentication.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -15,7 +15,7 @@ function fetchQuestions($db) {
             FROM questions 
             JOIN tags ON questions.tag_id = tags.id 
             WHERE questions.tag_id = ?";  // For filtering based on a specific category (if needed)
-    
+
     $tag_id = $_GET['category_id'] ?? null; // Get category_id from URL or set to null
 
     if ($tag_id) {
@@ -42,7 +42,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['question_content'], $
     $stmt->bind_param("iis", $user_id, $category_id, $question_content);
 
     if ($stmt->execute()) {
-        header("Location: index.php");
+        // Determine user role (assuming you store role in session)
+        $is_expert = $_SESSION['is_expert'] ?? false; // Check if user is an expert
+
+        // Redirect to appropriate page based on user role
+        if ($is_expert) {
+            header("Location: index.php"); // Redirect to expert's index
+        } else {
+            header("Location: user-index.php"); // Redirect to user's index
+        }
         exit();
     } else {
         echo "Error: " . $stmt->error;

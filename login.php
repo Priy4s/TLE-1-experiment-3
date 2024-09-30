@@ -1,4 +1,5 @@
 <?php
+
 // required when working with sessions
 session_start();
 /** @var mysqli $db */
@@ -31,11 +32,18 @@ if (isset($_POST['submit'])) {
         if (password_verify($password, $user['password'])) {
             // Store the user in the session
             $_SESSION['user_id'] = $user['id'];
+            $_SESSION['is_expert'] = ($user['role'] === 'expert'); // Set is_expert based on user role
             $login = true;
 
-            // Redirect to index
-            header('Location: index.php');
-            exit();
+            // Redirect to appropriate page based on user role
+            if ($user['role'] === 'expert') {
+                // Redirect to index for experts
+                header('Location: index.php');
+            } else {
+                // Redirect to user-index for normal users
+                header('Location: user-index.php');
+            }
+            exit(); // Make sure to exit after the redirect
         } else {
             $errors['loginFailed'] = "Incorrect login credentials. Please try again.";
         }
@@ -56,8 +64,6 @@ if (isset($_POST['submit'])) {
 
     <link rel="stylesheet" href="./styles/style.css">
 </head>
-
-<body>
 
 <body class="login-page">
 
