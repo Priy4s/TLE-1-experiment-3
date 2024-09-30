@@ -1,4 +1,5 @@
 <?php
+
 // required when working with sessions
 session_start();
 /** @var mysqli $db */
