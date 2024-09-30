@@ -3,7 +3,7 @@
 
 // General settings
 $host       = "localhost";
-$database   = "tl1.2";
+$database   = "exp_3";
 $user       = "root";
 $password   = "";
 
