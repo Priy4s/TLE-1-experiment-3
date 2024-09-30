@@ -11,21 +11,6 @@ $question = $stmt->get_result()->fetch_assoc();
 
 // Get the logged-in user's ID (who is acting as an expert)
 $user_id = $_SESSION['user_id'];
-
-// Handle form submission (for answering)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $answer_content = $_POST['answer_content'];
-
-    // Insert the answer into the answers table
-    $stmt = $db->prepare("INSERT INTO answers (question_id, user_id, answer_content) VALUES (?, ?, ?)");
-    $stmt->bind_param('iis', $question_id, $user_id, $answer_content);
-
-    if ($stmt->execute()) {
-        echo "Answer submitted successfully!";
-    } else {
-        echo "Error: Could not submit the answer. " . $stmt->error;
-    }
-}
 ?>
 
 <!doctype html>
@@ -38,26 +23,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Answer Question</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="styles/style.css" rel="stylesheet">
+
 </head>
-
 <body>
-
-<div class="container my-5">
-    <div class="card p-4" style="background-color: var(--light-color);">
-        <h1 class="text-center" style="color: var(--primary-color);">Answer the Question</h1>
-        <p><?php echo htmlspecialchars($question['content']); ?></p>
-
-        <form method="post">
-            <div class="mb-3">
-                <label for="answer_content" class="form-label" style="color: var(--primary-color);">Your Answer</label>
-                <textarea name="answer_content" id="answer_content" class="form-control form-field" rows="5" required></textarea>
+    <main>
+        <section>
+            <span><?php echo 'Video call for: ' . htmlspecialchars($question['content']); ?></span>
+            <div id="container">
+                <video autoplay="true" id="videoElement"></video>
             </div>
-            <button type="submit" class="btn btn-primary submitButton">Submit Answer</button>
-        </form>
-    </div>
-</div>
-
+            <button id="endCall">End Call</button>
+        </section>
+    </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
+<script>
+    let video = document.querySelector("#videoElement");
+
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                video.srcObject = stream;
+            })
+            .catch(function (error) {
+                console.log("Something went wrong!");
+            });
+    }
+
+    document.getElementById("endCall").onclick = function () {
+        window.location.href = "rating.php";
+    };
+</script>

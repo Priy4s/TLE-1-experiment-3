@@ -51,7 +51,7 @@ if (isset($_POST['decline'])) {
 </head>
 <body>
     <div class="container mt-5">
-        <h2><?php echo htmlspecialchars($question['content']); ?></h2>
+        <h2><?php echo 'Video call for '. htmlspecialchars($question['content']); ?></h2>
         <p><strong>Question ID:</strong> <?php echo $question['id']; ?></p>
 
         <form method="post">
