@@ -91,7 +91,7 @@ $questions = fetchUserQuestions($db, $expertId);
             <input type="hidden" id="selected-category" name="category_id" value="" required>
         </form>
     <div>
-            <p class="warning">select atleast 1 tag</p>
+            <p class="warning">Select 1 Tag:</p>
         </div>
         <!-- Category Buttons -->
         <div>
