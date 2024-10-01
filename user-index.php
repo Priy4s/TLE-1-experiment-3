@@ -90,7 +90,9 @@ $questions = fetchUserQuestions($db, $expertId);
             <!-- Hidden field for category selection -->
             <input type="hidden" id="selected-category" name="category_id" value="" required>
         </form>
-
+    <div>
+            <p class="warning">je moet verplicht een tag invullen</p>
+        </div>
         <!-- Category Buttons -->
         <div>
             <?php
@@ -100,6 +102,7 @@ $questions = fetchUserQuestions($db, $expertId);
             }
             ?>
         </div>
+        
 
         <!-- Live Session Content -->
         <div class="content-box">
