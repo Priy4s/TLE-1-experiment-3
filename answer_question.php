@@ -178,6 +178,7 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
         const ratingSection = document.getElementById('rating-section');
         const endCallToRating = document.getElementById("endCallToRating");
         const videoElement = document.getElementById('videoElement');
+        const endCallToHome = document.getElementById("endCallToHome");
 
         // Initialize video stream
         async function startVideoStream() {
@@ -233,6 +234,18 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
         if (endCallToRating) {
             endCallToRating.addEventListener('click', function () {
                 ratingSection.style.display = 'block'; // Show the rating section
+            });
+        }
+
+        if (endCallToHome) {
+            endCallToHome.addEventListener('click', function () {
+                window.location.href = "index.php";
+            });
+        }
+
+        if (endCallToHome) {
+            endCallToHome.addEventListener('click', function () {
+                window.location.href = "index.php";
             });
         }
 
