@@ -2,6 +2,7 @@
 require_once __DIR__ . '/includes/authentication.php';
 require_once __DIR__ . '/includes/dbconnect.php';
 
+
 /** @var mysqli $db */
 $tags = fetchTags($db);  // Ensure that $conn is passed correctly
 
