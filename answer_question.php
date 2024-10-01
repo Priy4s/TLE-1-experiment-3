@@ -203,36 +203,39 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
         });
 
         submitRatingButton.addEventListener('click', function () {
-            const rating = ratingValue.value;
-            const questionId = document.getElementById('question-id').value;
+    const rating = ratingValue.value;
+    const questionId = document.getElementById('question-id').value;
 
-            if (rating === '0') {
-                ratingMessage.textContent = 'Please select a rating before submitting!';
-                return;
-            }
+    if (rating === '0') {
+        ratingMessage.textContent = 'Please select a rating before submitting!';
+        return;
+    }
 
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '', true); // Submit to the same page
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '', true); 
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-            // Send the rating and question ID
-            xhr.send(`rating_value=${rating}&question_id=${questionId}`);
 
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    ratingMessage.textContent = 'Rating submitted successfully!';
-                }
-            };
-        });
+    xhr.send(`rating_value=${rating}&question_id=${questionId}`);
 
-        // Show rating section when "End Call and rate expert" is clicked
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            ratingMessage.textContent = 'Rating submitted successfully!';
+
+            setTimeout(function () {
+                window.location.href = 'index.php';
+            }, 0); 
+        }
+    };
+});
+
+
         if (endCallToRating) {
             endCallToRating.addEventListener('click', function () {
                 ratingSection.style.display = 'block'; // Show the rating section
             });
         }
 
-        // Start video stream
         startVideoStream();
     });
 </script>
