@@ -3,10 +3,11 @@ require_once __DIR__ . '/includes/authentication.php';
 require_once 'includes/dbconnect.php';
 
 $question_id = $_GET['question_id'];
-$stmt = $db->prepare("SELECT content FROM questions WHERE id = ?");
+$stmt = $db->prepare("SELECT content, user_id FROM questions WHERE id = ?");
 $stmt->bind_param('i', $question_id);
 $stmt->execute();
 $question = $stmt->get_result()->fetch_assoc();
+
 
 $user_id = $_SESSION['user_id'];
 
@@ -28,6 +29,24 @@ if (isset($_POST['rating_value']) && isset($_POST['question_id'])) {
     } else {
         $rating_message = "Error: " . $stmt->error;
     }
+}
+
+// Prepare a notification for the user who asked the question
+$notification_message = "An expert is ready to answer your question: " . htmlspecialchars($question['content']);
+
+// Insert the notification into the notifications table
+$insert_notification_stmt = $db->prepare("
+    INSERT INTO notifications (user_id, question_id, notification_message, status) 
+    VALUES (?, ?, ?, 'pending')
+");
+$insert_notification_stmt->bind_param('iis', $question['user_id'], $question_id, $notification_message);
+
+if ($insert_notification_stmt->execute()) {
+    // Successfully created notification
+    $notification_status = "Notification sent to the user.";
+} else {
+    // Failed to create notification
+    $notification_status = "Failed to send notification: " . $insert_notification_stmt->error;
 }
 
 $userRoleQuery = "SELECT role FROM users WHERE id = $user_id";
