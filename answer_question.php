@@ -2,13 +2,27 @@
 require_once __DIR__ . '/includes/authentication.php';
 require_once 'includes/dbconnect.php';
 
+// Start session if not done in authentication.php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Check if user_id is set in session
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+} else {
+    die('User not logged in. Redirecting...');
+}
+
+// Get question content by question_id from GET parameter
 $question_id = $_GET['question_id'];
 $stmt = $db->prepare("SELECT content FROM questions WHERE id = ?");
 $stmt->bind_param('i', $question_id);
 $stmt->execute();
 $question = $stmt->get_result()->fetch_assoc();
 
-$user_id = $_SESSION['user_id'];
+// Hardcode user_id to 15 for rating purposes
+$hardcoded_user_id = 15;
 
 // Handle rating submission
 if (isset($_POST['rating_value']) && isset($_POST['question_id'])) {
@@ -21,7 +35,7 @@ if (isset($_POST['rating_value']) && isset($_POST['question_id'])) {
         VALUES (?, ?, 1)
         ON DUPLICATE KEY UPDATE points = points + ?, user_votes = user_votes + 1
     ");
-    $stmt->bind_param('iii', $user_id, $rating_value, $rating_value);
+    $stmt->bind_param('iii', $hardcoded_user_id, $rating_value, $rating_value);
 
     if ($stmt->execute()) {
         $rating_message = "Rating submitted successfully!";
@@ -30,10 +44,13 @@ if (isset($_POST['rating_value']) && isset($_POST['question_id'])) {
     }
 }
 
+// Fetch user role
 $userRoleQuery = "SELECT role FROM users WHERE id = $user_id";
 $userRoleResult = mysqli_query($db, $userRoleQuery);
 $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
 ?>
+
+
 
 <!doctype html>
 <html lang="en">
