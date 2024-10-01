@@ -239,16 +239,9 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
 
         if (endCallToHome) {
             endCallToHome.addEventListener('click', function () {
-                window.location.href = "user-index.php";
+                window.location.href = "index.php";
             });
         }
-
-        if (endCallToHome) {
-            endCallToHome.addEventListener('click', function () {
-                window.location.href = "user-index.php";
-            });
-        }
-
         startVideoStream();
     });
 </script>
