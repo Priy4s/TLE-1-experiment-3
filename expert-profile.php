@@ -142,6 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             justify-content: center; /* Align items to the center */
             align-items: center; /* Center items horizontally */
             height: 100%; /* Ensure full height for spacing */
+            width: 90%;
         }
 
         .flairForm button {
@@ -163,12 +164,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             padding-left: 10px; /* Slight left padding for main content */
         }
 
-        .sidebar {
-            padding: 20px;
-            background-color: #002855;
-            color: white;
-            width: 250px;
-        }
+        /*.sidebar {*/
+        /*    padding: 20px;*/
+        /*    background-color: #002855;*/
+        /*    color: white;*/
+        /*    width: 250px;*/
+        /*}*/
 
         .topic {
             display: block;
