@@ -64,10 +64,28 @@ if (isset($_POST['decline'])) {
             </form>
 
             <div class="mt-3">
-                <a href="index.php" class="btn btn-outline-primary">Back to Questions</a>
+                <button id="back-to-questions" class="btn btn-outline-primary">Back to Questions</button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- JavaScript for handling the back-to-questions logic -->
+<script>
+    document.getElementById('back-to-questions').addEventListener('click', function () {
+        // Use PHP to get the user role based on is_expert
+        const isExpert = "<?php echo isset($_SESSION['is_expert']) && $_SESSION['is_expert'] == 1 ? 'expert' : 'user'; ?>";
+
+        if (isExpert === 'expert') {
+            window.location.href = 'index.php'; // Redirect to expert index
+        } else if (isExpert === 'user') {
+            window.location.href = 'user-index.php'; // Redirect to user index
+        } else {
+            alert('Unauthorized access.'); // Handle unauthorized access
+        }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
