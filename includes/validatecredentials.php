@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/includes/authentication.php';
 require_once 'includes/dbconnect.php';
 
 // Function to check if a username exists in the database

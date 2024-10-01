@@ -88,6 +88,7 @@ if (isset($_POST['submit'])) {
 
         <button type="submit" class="btn btn-primary" name="submit">Login</button>
     </form>
+    <a href="registration.php">No account yet? Register here!</a>
 </div>
 
 <!-- Bootstrap JS -->
