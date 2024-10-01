@@ -224,7 +224,7 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
             ratingMessage.textContent = 'Rating submitted successfully!';
 
             setTimeout(function () {
-                window.location.href = 'index.php';
+                window.location.href = 'user-index.php';
             }, 0); 
         }
     };
@@ -239,13 +239,13 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
 
         if (endCallToHome) {
             endCallToHome.addEventListener('click', function () {
-                window.location.href = "index.php";
+                window.location.href = "user-index.php";
             });
         }
 
         if (endCallToHome) {
             endCallToHome.addEventListener('click', function () {
-                window.location.href = "index.php";
+                window.location.href = "user-index.php";
             });
         }
 
