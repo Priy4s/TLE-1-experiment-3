@@ -1,99 +1,57 @@
 <?php
-require_once __DIR__ . '/includes/authentication.php';
 
+require_once __DIR__ . '/includes/authentication.php';
 require_once "includes/dbconnect.php";
 
 /** @var mysqli $db */
 
-// Controleer of de gebruiker is ingelogd
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    // Als er geen gebruiker is ingelogd, omleiden naar login pagina
+    // Redirect to the login page if the user is not logged in
     header("Location: login.php");
     exit();
 }
 
-// Haal de user_id uit de sessie
+// Get the user ID from the session
 $user_id = $_SESSION['user_id'];
 
-// Haal de rol van de gebruiker op
+// Get the user's role
 $userRoleQuery = "SELECT role FROM users WHERE id = $user_id";
 $userRoleResult = mysqli_query($db, $userRoleQuery);
 $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
 
-// Controleer of de gebruiker een expert of admin is
+// Redirect if the user is not an expert or admin
 if ($userRole !== 'expert' && $userRole !== 'admin') {
-    // Redirect naar een foutpagina of terug naar login als ze niet gemachtigd zijn
     header("Location: unauthorized.php");
     exit();
 }
-$queryUsername = "SELECT username FROM users WHERE id = '$user_id'";
 
+// Fetch the username based on the user ID
+$queryUsername = "SELECT username FROM users WHERE id = '$user_id'";
 $resultUsername = mysqli_query($db, $queryUsername);
 
 if ($resultUsername && mysqli_num_rows($resultUsername) > 0) {
     $userData = mysqli_fetch_assoc($resultUsername);
     $username = $userData['username'];
 } else {
-    $username = "Onbekende gebruiker";
-}
-// Add flair to user
-if (isset($_POST['add_flair']) && !empty($_POST['flair_name'])) {
-    $flair_name = mysqli_real_escape_string($db, $_POST['flair_name']);
-
-    // Check if flair exists in the `tags` table
-    $checkFlair = "SELECT id FROM tags WHERE tag_name = '$flair_name'";
-    $flairResult = mysqli_query($db, $checkFlair);
-
-    if (mysqli_num_rows($flairResult) == 0) {
-        // Insert new flair if it doesn't exist
-        $insertFlair = "INSERT INTO tags (tag_name) VALUES ('$flair_name')";
-        mysqli_query($db, $insertFlair);
-        $flair_id = mysqli_insert_id($db);
-    } else {
-        // Get the existing flair id
-        $flair = mysqli_fetch_assoc($flairResult);
-        $flair_id = $flair['id'];
-    }
-
-    // Controleer of de flair al is toegewezen aan de gebruiker
-    $checkIfAssigned = "SELECT * FROM usertags WHERE user_id = $user_id AND tag_id = $flair_id";
-    $assignedResult = mysqli_query($db, $checkIfAssigned);
-
-    if (mysqli_num_rows($assignedResult) == 0) {
-        // Flair is nog niet toegewezen, voeg deze toe
-        $assignFlair = "INSERT INTO usertags (user_id, tag_id) VALUES ($user_id, $flair_id)";
-        mysqli_query($db, $assignFlair);
-    } else {
-        // Flair is al toegewezen, geef eventueel een melding
-        echo "Flair is al toegevoegd.";
-    }
-
-    // Redirect to avoid form resubmission on refresh
-    header("Location: expert-profile.php");
-    exit();
+    $username = "Unknown User";
 }
 
-// Remove newest flair for user
-if (isset($_POST['remove_flair'])) {
-    // Find the latest flair assigned to the user by ID
-    $latestFlairQuery = "SELECT usertags.tag_id FROM usertags 
-                         WHERE usertags.user_id = $user_id
-                         ORDER BY usertags.id DESC LIMIT 1";
-    $latestFlairResult = mysqli_query($db, $latestFlairQuery);
+// Fetch all available flairs (tags) from the database
+$flairsQuery = "SELECT id, tag_name FROM tags";
+$flairsResult = mysqli_query($db, $flairsQuery);
+$all_flairs = [];
 
-    if (mysqli_num_rows($latestFlairResult) > 0) {
-        $latestFlair = mysqli_fetch_assoc($latestFlairResult);
-        $latest_flair_id = $latestFlair['tag_id'];
-
-        // Remove the latest flair assignment
-        $removeFlair = "DELETE FROM usertags WHERE user_id = $user_id AND tag_id = $latest_flair_id LIMIT 1";
-        mysqli_query($db, $removeFlair);
+if ($flairsResult && mysqli_num_rows($flairsResult) > 0) {
+    while ($row = mysqli_fetch_assoc($flairsResult)) {
+        $all_flairs[] = $row; // Store all flairs as an associative array
     }
-
-    // Redirect to avoid form resubmission on refresh
-    header("Location: expert-profile.php");
-    exit();
 }
+
+// Sort the all_flairs array alphabetically by tag name
+usort($all_flairs, function ($a, $b) {
+    return strcmp($a['tag_name'], $b['tag_name']);
+});
 
 // Fetch flairs assigned to the user
 $query = "SELECT tags.tag_name FROM usertags
@@ -105,7 +63,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $assigned_flairs[] = $row['tag_name'];
 }
 
-// Calculate average rating
+// Calculate the average rating
 $avgRatingQuery = "
     SELECT 
         SUM(points) / NULLIF(SUM(user_votes), 0) AS average_rating 
@@ -116,6 +74,25 @@ $avgRatingQuery = "
 ";
 $avgRatingResult = mysqli_query($db, $avgRatingQuery);
 $averageRating = mysqli_fetch_assoc($avgRatingResult)['average_rating'];
+
+// Handle adding and removing flairs
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['add_flairs']) && !empty($_POST['flairs'])) {
+        foreach ($_POST['flairs'] as $flairId) {
+            $insertQuery = "INSERT INTO usertags (user_id, tag_id) VALUES ('$user_id', '$flairId')";
+            mysqli_query($db, $insertQuery);
+        }
+        header("Location: expert-profile.php"); // Refresh the page to see the changes
+        exit();
+    }
+
+    if (isset($_POST['remove_flair']) && !empty($assigned_flairs)) {
+        $removeQuery = "DELETE FROM usertags WHERE user_id = '$user_id' AND tag_id = (SELECT id FROM tags WHERE tag_name = '{$assigned_flairs[count($assigned_flairs) - 1]}')";
+        mysqli_query($db, $removeQuery);
+        header("Location: expert-profile.php"); // Refresh the page to see the changes
+        exit();
+    }
+}
 ?>
 
 <!doctype html>
@@ -128,11 +105,84 @@ $averageRating = mysqli_fetch_assoc($avgRatingResult)['average_rating'];
     <link rel="stylesheet" href="styles/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .flair-checkboxes {
+            display: flex;
+            justify-content: left;
+            flex-wrap: wrap; /* Allow checkboxes to wrap to the next line */
+            gap: 10px; /* Spacing between checkboxes */
+            margin-left: -20%; /* Shift checkboxes 20% to the left */
+            padding-left: 0px; /* Add some padding to keep it visually centered */
+        }
+
+        .flair-checkboxes label {
+            display: flex;
+            align-items: left;
+            cursor: pointer;
+            margin: 0; /* Ensure no margin around labels */
+            width: calc(50% - 60px); /* Each label takes half of the space with reduced width for better alignment */
+            padding-left: 0px; /* Adjust this padding to position the checkbox better */
+            max-width: 70%; /* Set a maximum width for the label */
+            white-space: nowrap; /* Prevent text from wrapping */
+            overflow: hidden; /* Hide any overflow */
+            text-overflow: ellipsis; /* Show ellipsis for overflow */
+        }
+
+        .flair-checkboxes input[type="checkbox"] {
+            margin-right: 0px; /* Space between checkbox and label text */
+        }
+
+        .flair-header {
+            margin-bottom: 20px; /* Space below the header */
+        }
+
+        .flairForm {
+            display: flex;
+            flex-direction: column; /* Arrange elements in a column */
+            justify-content: center; /* Align items to the center */
+            align-items: center; /* Center items horizontally */
+            height: 100%; /* Ensure full height for spacing */
+            width: 90%;
+        }
+
+        .flairForm button {
+            margin-top: 20px;
+            background-color: #002855;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            width: 200px; /* Set a consistent width for the button */
+        }
+
+        .flairForm button:hover {
+            background-color: #004080;
+            cursor: pointer;
+        }
+
+        .mainPageContent {
+            padding-left: 10px; /* Slight left padding for main content */
+        }
+
+        /*.sidebar {*/
+        /*    padding: 20px;*/
+        /*    background-color: #002855;*/
+        /*    color: white;*/
+        /*    width: 250px;*/
+        /*}*/
+
+        .topic {
+            display: block;
+            background-color: #004080;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 
 <main class="profileMain">
-<!--    Sidebar section-->
     <section>
         <div class="sidebar">
             <h2>Your Assigned Flairs</h2>
@@ -140,9 +190,7 @@ $averageRating = mysqli_fetch_assoc($avgRatingResult)['average_rating'];
                 foreach ($assigned_flairs as $flair) {
                     echo "<span class='topic'>$flair</span>";
                 }
-                // Adding the form after the foreach loop
                 ?>
-                <!-- Separate form for removing the newest flair -->
                 <form method="post" class="removeFlairForm">
                     <button type="submit" name="remove_flair">Remove Newest Flair</button>
                 </form>
@@ -150,8 +198,6 @@ $averageRating = mysqli_fetch_assoc($avgRatingResult)['average_rating'];
             } else {
                 echo "<span class='topic'>No flairs assigned</span>";
             } ?>
-
-
         </div>
         <div class="sidebarProfile">
             <div class="profile">
@@ -159,54 +205,49 @@ $averageRating = mysqli_fetch_assoc($avgRatingResult)['average_rating'];
                     <span id="star-rating-display"><?php echo $averageRating !== null ? number_format($averageRating, 2) : 'No ratings available.'; ?></span>
                 </div>
                 <div class="username">
-                    <?php echo htmlspecialchars($username). "'s profile"; ?>
+                    <?php echo htmlspecialchars($username) . "'s profile"; ?>
                 </div>
             </div>
         </div>
     </section>
-<!--    Main page content-->
-    <section class="mainPageContent">
-        <!-- Form for adding flairs -->
-        <form method="post" class="flairForm">
-            <input type="text" name="flair_name" placeholder="Enter Flair Name">
-            <button type="submit" name="add_flair">Add Flair</button>
-        </form>
 
+    <section class="mainPageContent">
+        <div class="flair-header">
+            <h3>Select Flairs to Add</h3>
+        </div>
+        <form method="post" class="flairForm">
+            <div class="flair-checkboxes">
+                <?php if (!empty($all_flairs)): ?>
+                    <?php foreach ($all_flairs as $flair): ?>
+                        <label>
+                            <input type="checkbox" name="flairs[]" value="<?php echo htmlspecialchars($flair['id']); ?>">
+                            <?php echo htmlspecialchars($flair['tag_name']); ?>
+                        </label>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>No flairs available.</p>
+                <?php endif; ?>
+            </div>
+            <button type="submit" name="add_flairs">Add Selected Flairs</button>
+        </form>
     </section>
 </main>
 
-<!--<h1>Expert Profile Management --><?php //echo htmlspecialchars($username); ?><!--</h1>-->
-
-
-<!-- Display average rating -->
-
 <script>
-    // PHP variabele naar JavaScript omzetten
-    const averageRating = <?php echo round($averageRating ?? 0, 1); ?>; // Rond af op 1 decimaal
+    const averageRating = <?php echo round($averageRating ?? 0, 1); ?>;
 
-    // Functie om sterren weer te geven
     function displayStars(rating) {
         const starRatingDisplay = document.getElementById('star-rating-display');
-        starRatingDisplay.innerHTML = ''; // Leegmaken van de div voordat we de sterren toevoegen
+        starRatingDisplay.innerHTML = '';
 
-        // Voeg maximaal 5 sterren toe
         for (let i = 1; i <= 5; i++) {
             const star = document.createElement('span');
-            if (i <= rating) {
-                star.classList.add('filled-star'); // Gevulde sterren
-                star.innerHTML = '&#9733;'; // Unicode voor een gevulde ster
-            } else {
-                star.classList.add('empty-star'); // Lege sterren
-                star.innerHTML = '&#9734;'; // Unicode voor een lege ster
-            }
+            star.className = 'star';
+            star.innerHTML = i <= rating ? '&#9733;' : '&#9734;'; // Filled star or empty star
             starRatingDisplay.appendChild(star);
         }
-
-        // Optioneel: Toon de numerieke waarde van de beoordeling
-        document.getElementById('rating-text').innerText = `Gemiddelde rating: ${rating}/5`;
     }
 
-    // Roep de functie aan om de sterren te tonen
     displayStars(averageRating);
 </script>
 </body>
