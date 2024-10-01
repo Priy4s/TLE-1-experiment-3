@@ -91,9 +91,9 @@ $questions = fetchQuestionsForExpert($db, $expertTags);
             <a href="question_details.php?question_id=<?php echo $question['id']; ?>"><?php echo htmlspecialchars($question['content']); ?></a>
         <?php endforeach; ?>
         <!-- Show All Questions Button -->
-        <div class="mt-3">
-            <a href="all_questions.php" class="btn btn-info">Show All Questions</a>
-        </div>
+<!--        <div class="mt-3">-->
+<!--            <a href="all_questions.php" class="btn btn-info">Show All Questions</a>-->
+<!--        </div>-->
     </div>
     <div class="sidebarProfile">
         <div class="profile">
