@@ -100,8 +100,7 @@ $questions = fetchQuestionsForExpert($db, $expertTags);
             <div>
                 <a href="expert-profile.php" class="username">Profile</a>
                 <a href="logout.php" class="username">Logout</a>
-                <a href="login.php" class="username">Login</a>
-                <a href="registration.php" class="username">Register</a>
+
             </div>
         </div>
     </div>
