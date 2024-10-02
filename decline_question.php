@@ -1,34 +1,51 @@
 <?php
 require_once __DIR__ . '/includes/authentication.php';
-require_once 'includes/dbconnect.php';
+require_once __DIR__ . '/includes/dbconnect.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $question_id = $_POST['question_id'];
+    // Check and sanitize the question_id
+    if (isset($_POST['question_id'])) {
+        $question_id = intval($_POST['question_id']);
 
-    $user_id = $_SESSION['user_id'];
+        // Debugging: echo the question_id
+        echo "Received Question ID: " . $question_id . "<br>";
 
-    $userRoleQuery = "SELECT role FROM users WHERE id = $user_id";
-    $userRoleResult = mysqli_query($db, $userRoleQuery);
-    $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
-
-    if (isset($_POST['cancel'])) {
-        header("Location: question_details.php?question_id=$question_id");
-        exit();
-    }
-
-// If "Decline" button is clicked
-    if (isset($_POST['decline'])) {
-        if ($userRole == 'expert' || $userRole == 'admin') {
-            header("Location: index.php");
-        } else {
-            header("Location: user-index.php");
+        // If "Cancel" button is clicked
+        if (isset($_POST['cancel'])) {
+            // Redirect back to the question details page
+            header("Location: question_details.php?question_id=$question_id");
+            exit();
         }
-        exit();
+
+        // If "Decline" button is clicked
+        if (isset($_POST['decline'])) {
+            // Debugging: echo a message indicating the decline process has started
+            echo "Decline button clicked. Proceeding to delete Question ID: " . $question_id . "<br>";
+
+            // Delete the question from the database
+            $deleteQuery = "DELETE FROM questions WHERE id = ?";
+            $stmt = $db->prepare($deleteQuery);
+            $stmt->bind_param("i", $question_id);
+            $stmt->execute();
+
+            if ($stmt->affected_rows > 0) {
+                // Debugging: echo a success message
+                echo "Question ID " . $question_id . " successfully deleted.<br>";
+
+                // Redirect to index page after successful deletion
+                header("Location: index.php");
+            } else {
+                // Debugging: echo a failure message
+                echo "Failed to delete the question with ID: " . $question_id . "<br>";
+            }
+            exit();
+        }
+    } else {
+        echo "No question ID provided.<br>";
     }
 }
-
-
 ?>
+
 <!doctype html>
 <html lang="en">
 
@@ -48,7 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h1 class="text-center" style="color: var(--primary-color);">Are you sure you want to decline this question?</h1>
 
         <form method="post">
+            <!-- Pass question_id as a hidden input field -->
             <input type="hidden" name="question_id" value="<?php echo htmlspecialchars($_GET['question_id']); ?>">
+
+            <!-- Debugging: echo the question ID in the form -->
+            <p>Debug: The Question ID in the form is: <?php echo htmlspecialchars($_GET['question_id']); ?></p>
 
             <button type="submit" name="decline" class="btn btn-danger">Yes, decline</button>
             <button type="submit" name="cancel" class="btn btn-secondary">Cancel</button>

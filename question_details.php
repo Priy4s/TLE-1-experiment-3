@@ -34,7 +34,7 @@ if (isset($_POST['answer'])) {
 // If "Decline" button is clicked
 if (isset($_POST['decline'])) {
     // Redirect to decline logic, or handle it here
-    header("Location: decline_question.php?question_id=$question_id");
+    //header("Location: decline_question.php?question_id=$question_id");
     exit();
 }
 ?>
