@@ -101,7 +101,6 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
             width: 500px; /* Width of the video element */
             height: 300px; /* Set a fixed height for consistency */
             border-radius: 8px; /* Rounded corners */
-            /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); !* Light shadow effect *!*/
             margin: 0 10px; /* Space between videos */
         }
 
@@ -129,8 +128,12 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
     <section>
         <span class="fs-5"><?php echo 'Active question: ' . htmlspecialchars($question['content']); ?></span>
         <div id="container">
+            <?php
+            // Set video source based on user role
+            $videoSource = ($userRole == 'expert' || $userRole == 'admin') ? 'images/user_video.mp4' : 'images/expert_explaining.mp4';
+            ?>
             <video autoplay loop muted id="videoElement">
-                <source src="images/expert_explaining.mp4" type="video/mp4">
+                <source src="<?php echo $videoSource; ?>" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
             <video autoplay="true" id="userVideoElement"></video>
@@ -210,7 +213,6 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
             xhr.open('POST', '', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-
             xhr.send(`rating_value=${rating}&question_id=${questionId}`);
 
             xhr.onreadystatechange = function () {
@@ -224,7 +226,6 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
             };
         });
 
-
         if (endCallToRating) {
             endCallToRating.addEventListener('click', function () {
                 ratingSection.style.display = 'block'; // Show the rating section
@@ -236,7 +237,6 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
                 window.location.href = "index.php";
             });
         }
-        startVideoStream();
     });
 </script>
 </body>
