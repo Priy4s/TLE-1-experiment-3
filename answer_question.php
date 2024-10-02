@@ -50,8 +50,6 @@ $userRoleResult = mysqli_query($db, $userRoleQuery);
 $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
 ?>
 
-
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -62,19 +60,6 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="styles/style.css" rel="stylesheet">
     <style>
-        #container {
-            display: flex;
-            justify-content: space-between;
-        }
-        video {
-            width: 100%; /* Adjust as needed */
-            height: auto; /* Maintain aspect ratio */
-        }
-        .placeholder {
-            width: 100%; /* Adjust as needed */
-            height: 100%; /* Adjust as needed */
-            background-color: gray; /* Placeholder color */
-        }
         body {
             background-color: #f8f9fa; /* Light background color */
         }
@@ -82,11 +67,13 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
         .container {
             margin-top: 50px;
         }
+
         .star {
             cursor: pointer;
             font-size: 2rem;
             color: #FFD700; /* Gold color */
         }
+
         main {
             display: flex;
             justify-content: center;
@@ -112,9 +99,9 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
 
         video {
             width: 500px; /* Width of the video element */
-            height: auto; /* Maintain aspect ratio */
+            height: 300px; /* Set a fixed height for consistency */
             border-radius: 8px; /* Rounded corners */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow effect */
+            /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); !* Light shadow effect *!*/
             margin: 0 10px; /* Space between videos */
         }
 
@@ -135,22 +122,6 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
         .end-call-btn:hover {
             background-color: #c82333; /* Darker red on hover */
         }
-
-
-
-        /* Placeholder for future video fields */
-        .placeholder {
-            width: 500px;
-            height: 370px;
-            background-color: #e9ecef;
-            border: 2px dashed #6c757d; /* Dashed border for the placeholder */
-            border-radius: 8px; /* Rounded corners */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2em;
-            color: #6c757d;
-        }
     </style>
 </head>
 <body>
@@ -158,8 +129,11 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
     <section>
         <span class="fs-5"><?php echo 'Active question: ' . htmlspecialchars($question['content']); ?></span>
         <div id="container">
-            <video autoplay="true" id="videoElement"></video>
-            <div class="placeholder">Placeholder for Second Camera</div>
+            <video autoplay loop muted id="videoElement">
+                <source src="images/expert_explaining.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <video autoplay="true" id="userVideoElement"></video>
         </div>
         <?php
         if ($userRole == 'expert' || $userRole == 'admin') {
@@ -194,18 +168,21 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
         const ratingMessage = document.getElementById('rating-message');
         const ratingSection = document.getElementById('rating-section');
         const endCallToRating = document.getElementById("endCallToRating");
-        const videoElement = document.getElementById('videoElement');
+        const userVideoElement = document.getElementById('userVideoElement');
         const endCallToHome = document.getElementById("endCallToHome");
 
         // Initialize video stream
-        async function startVideoStream() {
+        async function startUserVideoStream() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                videoElement.srcObject = stream;
+                userVideoElement.srcObject = stream;
             } catch (error) {
                 console.error("Error accessing the webcam: ", error);
             }
         }
+
+        // Start user video stream on page load
+        startUserVideoStream();
 
         stars.forEach(star => {
             star.addEventListener('click', function () {
@@ -221,31 +198,31 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
         });
 
         submitRatingButton.addEventListener('click', function () {
-    const rating = ratingValue.value;
-    const questionId = document.getElementById('question-id').value;
+            const rating = ratingValue.value;
+            const questionId = document.getElementById('question-id').value;
 
-    if (rating === '0') {
-        ratingMessage.textContent = 'Please select a rating before submitting!';
-        return;
-    }
+            if (rating === '0') {
+                ratingMessage.textContent = 'Please select a rating before submitting!';
+                return;
+            }
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '', true); 
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
 
-    xhr.send(`rating_value=${rating}&question_id=${questionId}`);
+            xhr.send(`rating_value=${rating}&question_id=${questionId}`);
 
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            ratingMessage.textContent = 'Rating submitted successfully!';
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    ratingMessage.textContent = 'Rating submitted successfully!';
 
-            setTimeout(function () {
-                window.location.href = 'user-index.php';
-            }, 0); 
-        }
-    };
-});
+                    setTimeout(function () {
+                        window.location.href = 'user-index.php';
+                    }, 0);
+                }
+            };
+        });
 
 
         if (endCallToRating) {
@@ -264,4 +241,3 @@ $userRole = mysqli_fetch_assoc($userRoleResult)['role'];
 </script>
 </body>
 </html>
-
