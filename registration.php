@@ -67,7 +67,7 @@ if (isset($_POST['submit'])) {
             }
 
             // Redirect to index.php after successful registration
-            header('Location: index.php');
+            header('Location: login.php');
             exit(); // Important: Ensure no further code is executed after redirection
         } else {
             $errors['db'] = 'Databasefout: ' . mysqli_error($db);

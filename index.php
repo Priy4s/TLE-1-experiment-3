@@ -120,6 +120,7 @@ $questions = fetchQuestionsForExpert($db, $expertTags);
                 <!-- Hidden field for category selection -->
                 <input type="hidden" id="selected-category" name="category_id" value="" required>
             </form>
+            <p class="warning">Select 1 Tag:</p>
 
             <!-- Category Buttons -->
             <div>
